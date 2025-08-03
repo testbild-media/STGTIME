@@ -1,6 +1,6 @@
 # STGTIME
 
-STGTIME is a DIY countdown timer designed for use on stages and at conferences. It’s also known as a speech time display. The system is based on Node.js and an RGB display.
+STGTIME is a DIY countdown timer designed for use on stages and at conferences. It’s also known as a speech time display. The system is based on Node.js and an RGB HUB75 display.
 
 A web-based GUI is available for control and configuration, and the device can be controlled via its API using Bitfocus Companion.
 
