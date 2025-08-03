@@ -18,6 +18,7 @@ Both the speech timer and the video cue timer include a progress bar to give a v
 | Power Supply 5V >5A | https://www.amazon.de/dp/B019GUOV40 |
 
 ## ToDo's
+|:-|:-|
 | Build Node.js server | ✅ |
 | Implement canvas-based rendering | ✅ |
 | Integrate matrix display | ✅ |
