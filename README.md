@@ -17,6 +17,18 @@ Both the speech timer and the video cue timer include a progress bar to give a v
 | Seengreat RGB Matrix Adapter Board Rev 3.6 | https://www.amazon.de/dp/B0BC8Y447G |
 | Power Supply 5V >5A | https://www.amazon.de/dp/B019GUOV40 |
 
+## ToDo's
+| Build Node.js server | ✅ |
+| Implement canvas-based rendering | ✅ |
+| Integrate matrix display | ✅ |
+| Develop API interface | 🔁 |
+| Create Bitfocus Companion module | 🔁 |
+| Build web-based GUI | 🔁 |
+| Refactor and clean up code | ❌ | 
+| Design 3D-printable housing | 🔁 |
+| Perform cold tests (offline testing) | 🔁 |
+| Assemble final product | ❌ |
+
 ## License
 This project is licensed under a modified MIT License.  
 You may use, modify, and distribute the Software for personal or non-commercial use, including renting devices with the Software installed.  
