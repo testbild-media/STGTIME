@@ -29,6 +29,7 @@ Both the speech timer and the video cue timer include a progress bar to give a v
 | Build Node.js server              | ✅     | Node.js server is running |
 | Implement canvas-based rendering  | ✅     | Canvas rendering works as expected |
 | Integrate matrix display          | ✅     | Matrix display is functional |
+| Implement relay for display       | ❌     | The display shows visual artifacts on boot. Add a relay to disable the display during system startup. |
 | Develop API interface             | 🔁     | Partially done – exploring some new ideas |
 | Create Bitfocus Companion module  | 🔁     | Functionally done – final testing pending. |
 | Build web-based GUI               | 🔁     | Basic GUI is in place – needs styling improvements |
