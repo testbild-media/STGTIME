@@ -9,7 +9,7 @@ There is also a permanent clock display that shows the current time.
 
 Both the speech timer and the video cue timer include a progress bar to give a visual sense of the remaining time.
 
-Devices needed:
+## Devices needed:
 | Device | Link |
 |:-|:-|
 | Raspberry Pi 4 2/4GB | https://www.berrybase.de/raspberry-pi-4-computer-modell-b-4gb-ram |
@@ -17,11 +17,7 @@ Devices needed:
 | Seengreat RGB Matrix Adapter Board Rev 3.6 | https://www.amazon.de/dp/B0BC8Y447G |
 | Power Supply 5V >5A | https://www.amazon.de/dp/B019GUOV40 |
 
-
-
-
 ## License
-
 This project is licensed under a modified MIT License.  
 You may use, modify, and distribute the Software for personal or non-commercial use, including renting devices with the Software installed.  
 **Commercial distribution or sale as part of a product or service is not allowed without explicit permission.**  
