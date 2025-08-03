@@ -18,18 +18,18 @@ Both the speech timer and the video cue timer include a progress bar to give a v
 | Power Supply 5V >5A | https://www.amazon.de/dp/B019GUOV40 |
 
 ## ToDo's
-| Task | Status |
-|:-|:-|
-| Build Node.js server | ✅ |
-| Implement canvas-based rendering | ✅ |
-| Integrate matrix display | ✅ |
-| Develop API interface | 🔁 |
-| Create Bitfocus Companion module | 🔁 |
-| Build web-based GUI | 🔁 |
-| Refactor and clean up code | ❌ | 
-| Design 3D-printable housing | 🔁 |
-| Perform cold tests (offline testing) | 🔁 |
-| Assemble final product | ❌ |
+| Task                              | Status | Note |
+|-----------------------------------|--------|------|
+| Build Node.js server              | ✅     | Node.js server is running. |
+| Implement canvas-based rendering  | ✅     | Canvas rendering works as expected. |
+| Integrate matrix display          | ✅     | Matrix display is functional. |
+| Develop API interface             | 🔁     | Partially done – exploring some new ideas. |
+| Create Bitfocus Companion module  | 🔁     | Functionally done – final testing pending. |
+| Build web-based GUI               | 🔁     | Basic GUI is in place – needs styling improvements. |
+| Refactor and clean up code        | ❌     | Waiting until final tests are completed. |
+| Design 3D-printable housing       | 🔁     | Minor adjustments still needed. |
+| Perform cold tests (offline testing) | 🔁  | In progress during hardware assembly. |
+| Assemble final product            | ❌     | Waiting for completion of other tasks. |
 
 ## License
 This project is licensed under a modified MIT License.  
