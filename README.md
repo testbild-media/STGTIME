@@ -9,6 +9,8 @@ There is also a permanent clock display that shows the current time.
 
 Both the speech timer and the video cue timer include a progress bar to give a visual sense of the remaining time.
 
+![Example](https://github.com/testbild-media/STGTIME/blob/main/images/clock_display.jpeg)-
+
 ## Devices needed:
 | Device | Link |
 |:-|:-|
