@@ -1,5 +1,13 @@
 # STGTIME
 
+STGTIME is a DIY countdown timer designed for use on stages and at conferences. It’s also known as a speech time display. The system is based on Node.js and an RGB display.
+
+A web-based GUI is available for control and configuration, and the device can be controlled via its API using Bitfocus Companion.
+
+In addition to the main speech timer, there is a second display that can show timing cues for videos or other events. This display is triggered via Companion triggers, but the video timer row can also be hidden if not needed.
+There is also a permanent clock display that shows the current time.
+
+Both the speech timer and the video cue timer include a progress bar to give a visual sense of the remaining time.
 
 Devices needed:
 | Device | Link |
