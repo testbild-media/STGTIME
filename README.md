@@ -36,6 +36,7 @@ Both the speech timer and the video cue timer include a progress bar to give a v
 | Design 3D-printable housing       | 🔁     | Minor adjustments still needed. |
 | Perform cold tests (offline testing) | 🔁  | In progress during hardware assembly. |
 | Assemble final product            | ❌     | Waiting for completion of other tasks. |
+| create wiki                       | ❌     | |
 | create .img for easy install      | ❌     | |
 
 ## License
