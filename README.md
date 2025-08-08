@@ -13,7 +13,7 @@ Both the speech timer and the video cue timer include a progress bar to give a v
 | Image | Note |
 |:-:|:-|
 | ![Example](https://github.com/testbild-media/STGTIME/blob/main/images/clock_display.jpeg) | On top: the main countdown/timer with a large progress bar.<br><br>Second line: a smaller video timer with its own progress bar, which can be hidden if not needed.<br><br>Bottom line: the current time is always displayed.<br><br>Both the colors and timing behavior of the progress bar can be customized via the Web GUI.<br>The progress bar is automatically calculated by the server based on the total duration and the remaining time for both. |
-| ![Example](https://github.com/testbild-media/STGTIME/blob/main/images/3D_Model.jpg) | This is the current state of the 3D model. The ventilation inlets opposite the 40 mm fan are still missing. A power connector on the opposite side is also yet to be added, as well as the front panel cover, which will be screwed in place. |
+| ![Example](https://github.com/testbild-media/STGTIME/blob/main/images/3D_Model.jpg) | This is the current state of the 3D model. |
 
 ## Devices needed:
 | Device | Link |
