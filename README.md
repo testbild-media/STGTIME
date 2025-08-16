@@ -33,6 +33,7 @@ Both the speech timer and the video cue timer include a progress bar to give a v
 | Develop API interface             | ✅     | Partially done – exploring some new ideas |
 | Create Bitfocus Companion module  | ✅     | Functionally done – final testing pending. |
 | Build web-based GUI               | ✅     | Basic GUI is in place – needs styling improvements |
+| Integrate StreamDeck direct connection | ❌     | Used for direct control without GUI or companion |
 | Upload code to github             | ❌     | Hate to public unfinished code :D |
 | Refactor and clean up code        | ❌     | Waiting until final tests are completed |
 | Design 3D-printable housing       | ✅     | Minor adjustments still needed |
