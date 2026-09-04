@@ -1,0 +1,12 @@
+{
+  "name": "stgtime-streamdeck",
+  "version": "0.9.5-beta",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "scripts": { "start": "node index.mjs" },
+  "dependencies": {
+    "@elgato-stream-deck/node": "^7.3.2",
+    "jpeg-js": "^0.4.4"
+  }
+}

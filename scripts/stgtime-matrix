@@ -1,0 +1,6 @@
+#!/bin/sh
+set -eu
+
+# The HUB75 refresh loop needs deterministic scheduling. Core 3 is isolated by
+# the installer on the supported Raspberry Pi 4 and reserved for this process.
+exec /usr/bin/chrt -f 90 /usr/bin/taskset -c 3 /opt/stgtime/current/native/stgtime-matrix-bin "$@"

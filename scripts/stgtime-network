@@ -1,0 +1,41 @@
+#!/bin/sh
+set -eu
+
+action="${1:-}"
+connection="STGTIME-Hotspot"
+
+case "$action" in
+  hotspot-on)
+    ssid="${2:-STGTIME}"; password="${3:-stagetimer}"
+    [ "${#password}" -ge 8 ] || { echo "Hotspot password must contain at least 8 characters" >&2; exit 2; }
+    nmcli radio wifi on
+    wifi_device="$(nmcli -t -f DEVICE,TYPE device status | awk -F: '$2=="wifi"{print $1; exit}')"
+    [ -n "$wifi_device" ] || { echo "No Wi-Fi interface found" >&2; exit 3; }
+    nmcli connection delete "$connection" >/dev/null 2>&1 || true
+    nmcli device wifi hotspot ifname "$wifi_device" con-name "$connection" ssid "$ssid" password "$password" >/dev/null
+    nmcli connection modify "$connection" connection.autoconnect no ipv6.method disabled
+    echo "Hotspot enabled"
+    ;;
+  hotspot-off)
+    nmcli connection down "$connection" >/dev/null 2>&1 || true
+    echo "Hotspot disabled"
+    ;;
+  ethernet-dhcp)
+    ethernet="$(nmcli -t -f NAME,TYPE connection show | awk -F: '$2=="802-3-ethernet"{print $1; exit}')"
+    [ -n "$ethernet" ] || { echo "No Ethernet connection found" >&2; exit 4; }
+    nmcli connection modify "$ethernet" ipv4.method auto ipv4.addresses "" ipv4.gateway "" ipv4.dns ""
+    nmcli connection up "$ethernet" >/dev/null
+    echo "Ethernet set to DHCP"
+    ;;
+  ethernet-static)
+    address="${2:-}"; gateway="${3:-}"; dns="${4:-}"
+    echo "$address" | grep -Eq '^[0-9.]+/[0-9]{1,2}$' || { echo "Invalid address/prefix" >&2; exit 2; }
+    echo "$gateway" | grep -Eq '^[0-9.]+$' || { echo "Invalid gateway" >&2; exit 2; }
+    ethernet="$(nmcli -t -f NAME,TYPE connection show | awk -F: '$2=="802-3-ethernet"{print $1; exit}')"
+    [ -n "$ethernet" ] || { echo "No Ethernet connection found" >&2; exit 4; }
+    nmcli connection modify "$ethernet" ipv4.method manual ipv4.addresses "$address" ipv4.gateway "$gateway" ipv4.dns "$dns"
+    nmcli connection up "$ethernet" >/dev/null
+    echo "Static Ethernet settings applied"
+    ;;
+  *) echo "Unsupported network action" >&2; exit 2 ;;
+esac

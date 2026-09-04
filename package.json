@@ -1,0 +1,16 @@
+{
+  "name": "stgtime",
+  "version": "0.9.5-beta",
+  "private": true,
+  "type": "module",
+  "description": "Standalone stage timer for a Raspberry Pi and 64x32 HUB75 display",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node src/server.mjs",
+    "dev": "node --watch src/server.mjs",
+    "test": "node --test",
+    "check": "node --check src/server.mjs && node --test"
+  }
+}

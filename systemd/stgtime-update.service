@@ -1,0 +1,11 @@
+[Unit]
+Description=Install a queued STGTIME update
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/libexec/stgtime-update apply
+Nice=10
+IOSchedulingClass=idle
+

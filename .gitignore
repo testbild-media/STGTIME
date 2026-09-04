@@ -1,0 +1,8 @@
+node_modules/
+data/
+*.log
+.env
+.DS_Store
+streamdeck/node_modules/
+stgtime-rpi4-arm64-*.tar.gz
+stgtime-rpi4-arm64-*.tar.gz.sha256

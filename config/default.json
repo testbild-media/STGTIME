@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 3,
+  "display": {
+    "driver": "hub75",
+    "brightness": 85,
+    "width": 64,
+    "height": 32,
+    "gpioMapping": "regular",
+    "gpioSlowdown": 5,
+    "scanMode": 0,
+    "pwmBits": 8,
+    "pwmLsbNanoseconds": 64,
+    "limitRefreshRateHz": 200,
+    "format": "HH:MM:SS",
+    "clockVisible": true,
+    "clockColor": "#ff8800",
+    "timeZone": "Europe/Berlin"
+  },
+  "timer": {
+    "mode": "countdown",
+    "durationMs": 600000,
+    "continueNegative": false,
+    "blinkAtEnd": true,
+    "colors": {
+      "normal": "#00ff00",
+      "warning": "#ffd000",
+      "critical": "#ff0000"
+    },
+    "thresholdsMs": {
+      "warning": 420000,
+      "critical": 180000
+    }
+  },
+  "message": {
+    "visible": false,
+    "text": "",
+    "color": "#ffffff"
+  },
+  "video": {
+    "visible": false,
+    "label": "VIDEO",
+    "remainingMs": 0,
+    "durationMs": 0,
+    "color": "#00ff48"
+  },
+  "network": {
+    "hostname": "stgtime",
+    "hotspotMode": "startup-5m",
+    "hotspotSsid": "STGTIME",
+    "hotspotPassword": "stagetimer",
+    "ethernetMode": "dhcp",
+    "ethernetAddress": "",
+    "ethernetGateway": "",
+    "ethernetDns": ""
+  },
+  "security": {
+    "webAuthMode": "ethernet-only",
+    "passwordHash": "",
+    "apiToken": ""
+  },
+  "presets": [
+    { "id": "five", "name": "5 minutes", "durationMs": 300000, "thresholdsMs": { "warning": 50000, "critical": 25000 } },
+    { "id": "ten", "name": "10 minutes", "durationMs": 600000, "thresholdsMs": { "warning": 100000, "critical": 50000 } },
+    { "id": "fifteen", "name": "15 minutes", "durationMs": 900000, "thresholdsMs": { "warning": 150000, "critical": 75000 } },
+    { "id": "thirty", "name": "30 minutes", "durationMs": 1800000, "thresholdsMs": { "warning": 300000, "critical": 150000 } }
+  ]
+}

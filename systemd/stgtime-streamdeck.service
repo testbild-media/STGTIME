@@ -1,0 +1,28 @@
+[Unit]
+Description=STGTIME native Stream Deck controller
+After=stgtime.service
+Requires=stgtime.service
+
+[Service]
+Type=simple
+User=stgtime
+Group=stgtime
+SupplementaryGroups=plugdev
+WorkingDirectory=/opt/stgtime/current/streamdeck
+Environment=STGTIME_API_URL=http://127.0.0.1
+Environment=STGTIME_CONFIG=/var/lib/stgtime/config.json
+ExecStart=/usr/bin/node /opt/stgtime/current/streamdeck/index.mjs
+Restart=on-failure
+RestartSec=3
+CPUAffinity=0 1 2
+Nice=15
+CPUWeight=10
+IOSchedulingClass=idle
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadOnlyPaths=/var/lib/stgtime/config.json
+
+[Install]
+WantedBy=multi-user.target

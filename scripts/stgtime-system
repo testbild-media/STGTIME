@@ -1,0 +1,14 @@
+#!/bin/sh
+set -eu
+
+case "${1:-}" in
+  timezone)
+    [ "$#" -eq 2 ] || { echo "Usage: stgtime-system timezone IANA_ZONE" >&2; exit 2; }
+    timedatectl set-timezone "$2"
+    echo "System time zone set to $2"
+    ;;
+  *)
+    echo "Unsupported system action" >&2
+    exit 2
+    ;;
+esac

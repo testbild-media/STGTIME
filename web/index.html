@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#090b0d">
+  <title>STGTIME Control</title>
+    <link rel="stylesheet" href="/app.css?v=20260904-9">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand"><img src="/assets/logo.svg" alt="STGTIME"><div><strong>STGTIME</strong><span id="connection">Connecting…</span></div></div>
+      <button class="icon-button" id="logout" type="button" title="Sign out" aria-label="Sign out">↪</button>
+    </header>
+
+    <nav class="nav" aria-label="Main navigation">
+      <button class="nav-item active" data-page="control"><span>◷</span>Control</button>
+      <button class="nav-item" data-page="presets"><span>▦</span>Presets</button>
+      <button class="nav-item" data-page="display"><span>▤</span>Display</button>
+      <button class="nav-item" data-page="network"><span>⌁</span>Network</button>
+      <button class="nav-item" data-page="system"><span>⚙</span>System</button>
+    </nav>
+
+    <main>
+      <section class="page active" id="page-control">
+        <div class="page-heading"><div><p class="eyebrow">Live control</p><h1>Timer</h1></div><span class="status-pill stopped" id="run-status">Stopped</span></div>
+        <div class="control-grid">
+          <section class="panel preview-panel">
+            <div class="panel-heading"><h2>Display preview</h2><span>2 Hz</span></div>
+            <div class="matrix-wrap"><img id="display-preview" alt="Live 64 by 32 pixel display preview"></div>
+          </section>
+          <section class="panel timer-panel">
+            <div class="segmented" role="group" aria-label="Timer mode">
+              <button class="selected" data-mode="countdown">Countdown</button><button data-mode="stopwatch">Stopwatch</button>
+            </div>
+            <output class="timer-value" id="timer-value">00:10:00</output>
+            <div class="time-entry" aria-label="Set timer duration">
+              <label>HOURS<input id="hours" inputmode="numeric" type="number" min="0" max="99" value="0"></label><b>:</b>
+              <label>MINUTES<input id="minutes" inputmode="numeric" type="number" min="0" max="59" value="10"></label><b>:</b>
+              <label>SECONDS<input id="seconds" inputmode="numeric" type="number" min="0" max="59" value="0"></label>
+            </div>
+            <button class="button secondary full" id="set-time">Set time</button>
+            <div class="transport">
+              <button class="button secondary" id="reset">Reset</button>
+              <button class="button primary" id="toggle">Start</button>
+            </div>
+            <div class="jog-row"><button data-jog="-60000">−1 min</button><button data-jog="-10000">−10 sec</button><button data-jog="10000">+10 sec</button><button data-jog="60000">+1 min</button></div>
+          </section>
+          <section class="panel message-panel">
+            <div class="panel-heading"><h2>Message</h2><label class="switch"><input id="message-visible" type="checkbox" aria-label="Show message"><span></span></label></div>
+            <div class="inline-fields"><input id="message-text" maxlength="64" placeholder="Short message" autocomplete="off"><input id="message-color" type="color" value="#ffffff" aria-label="Message color"><button class="button secondary" id="message-apply">Apply</button></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="page" id="page-presets">
+        <div class="page-heading"><div><p class="eyebrow">Quick recall</p><h1>Presets</h1></div></div>
+        <div class="preset-grid" id="preset-grid"></div>
+        <section class="panel preset-editor"><h2>Add preset</h2><label>Name<input id="preset-name" maxlength="40" placeholder="Keynote"></label><div class="preset-times"><label>Duration<input id="preset-time" value="00:10:00" inputmode="numeric"></label><label>Warning at<input id="preset-warning" value="00:01:40" inputmode="numeric"></label><label>Critical at<input id="preset-critical" value="00:00:50" inputmode="numeric"></label></div><p class="hint">Warning and Critical are remaining times. Suggested values are 1/6 and 1/12 of the duration.</p><button class="button primary" id="add-preset">Add preset</button></section>
+      </section>
+
+      <section class="page" id="page-display">
+        <div class="page-heading"><div><p class="eyebrow">Pixel output</p><h1>Display</h1></div></div>
+        <div class="settings-grid">
+          <section class="panel form-panel"><h2>Appearance</h2>
+            <label>Brightness <output id="brightness-output">85%</output><input id="brightness" type="range" min="1" max="100" value="85"></label>
+            <label>Time format<select id="time-format"><option>HH:MM:SS</option><option>MM:SS</option></select></label>
+            <label class="check"><input id="clock-visible" type="checkbox" checked> Show NTP-synchronized clock</label>
+            <label>Clock time zone<select id="clock-time-zone"></select></label>
+            <div class="color-setting"><input id="clock-color" type="color" value="#ff8800"><span><b>Clock color</b><small>NTP-synchronized clock</small></span></div>
+            <button class="button primary" id="save-display">Save display settings</button>
+          </section>
+          <section class="panel form-panel"><h2>Timer colors</h2>
+            <div class="color-setting"><input id="normal-color" type="color" value="#00ff00"><span><b>Enough time</b><small>Default timer color</small></span></div>
+            <div class="color-setting"><input id="warning-color" type="color" value="#ffd000"><span><b>Warning</b><small>Approaching the end</small></span><input id="warning-time" value="00:07:00" aria-label="Warning threshold"></div>
+            <div class="color-setting"><input id="critical-color" type="color" value="#ff0000"><span><b>Critical</b><small>Wrap up now</small></span><input id="critical-time" value="00:03:00" aria-label="Critical threshold"></div>
+            <label class="check"><input id="continue-negative" type="checkbox"> Continue into negative time</label>
+            <label class="check"><input id="blink-end" type="checkbox" checked> Blink when time expires</label>
+            <button class="button primary" id="save-timer-style">Save timer settings</button>
+          </section>
+        </div>
+      </section>
+
+      <section class="page" id="page-network">
+        <div class="page-heading"><div><p class="eyebrow">Connectivity</p><h1>Network</h1></div></div>
+        <div class="settings-grid">
+          <section class="panel form-panel"><h2>Access point</h2>
+            <label>Hotspot behavior<select id="hotspot-mode"><option value="startup-5m">Enabled for 5 minutes after startup</option><option value="always">Always enabled</option><option value="off">Disabled</option></select></label>
+            <label>Wi-Fi name<input id="hotspot-ssid" value="STGTIME"></label>
+            <label>Password<input id="hotspot-password" type="password" value="stagetimer" minlength="8"></label>
+            <div class="transport"><button class="button secondary" id="hotspot-off">Stop hotspot</button><button class="button primary" id="hotspot-on">Start hotspot</button></div>
+          </section>
+          <section class="panel form-panel"><h2>Ethernet</h2>
+            <label>Addressing<select id="ethernet-mode"><option value="dhcp">DHCP</option><option value="static">Static address</option></select></label>
+            <div id="static-fields"><label>Address / prefix<input id="ethernet-address" placeholder="192.168.10.20/24"></label><label>Gateway<input id="ethernet-gateway" placeholder="192.168.10.1"></label><label>DNS servers<input id="ethernet-dns" placeholder="1.1.1.1, 8.8.8.8"></label></div>
+            <button class="button primary" id="apply-network">Save and apply</button>
+            <p class="hint">Changing network settings may disconnect this browser.</p>
+          </section>
+        </div>
+      </section>
+
+      <section class="page" id="page-system">
+        <div class="page-heading"><div><p class="eyebrow">Device</p><h1>System</h1></div></div>
+        <div class="settings-grid">
+          <section class="panel form-panel"><h2>API</h2><p class="hint">The documented REST API controls every timer, display and message function. Authenticate with a browser session or bearer token.</p><label>Device API token<input id="api-token" type="password" readonly value="••••••••••••••••"></label><div class="transport"><button class="button secondary" id="show-token">Show token</button><button class="button secondary" id="rotate-token">Rotate token</button></div><a class="button secondary" href="/api.html" target="_blank">Open API documentation</a></section>
+          <section class="panel form-panel"><h2>Security</h2><label>Web authentication<select id="auth-mode"><option value="always">All network connections</option><option value="ethernet-only">Ethernet only</option><option value="off">Disabled</option></select></label><button class="button secondary" id="save-auth-mode">Save access policy</button><label>Current admin password<input id="current-password" type="password" autocomplete="current-password"></label><label>New admin password<input id="new-password" type="password" minlength="8" autocomplete="new-password"></label><label>Retype new password<input id="retype-password" type="password" minlength="8" autocomplete="new-password"></label><button class="button primary" id="change-password">Change password</button></section>
+          <section class="panel form-panel status-panel"><h2>Status</h2><dl class="status-list"><div><dt>Version</dt><dd id="installed-version">—</dd></div><div><dt>Display</dt><dd id="display-driver">Simulator</dd></div><div><dt>IP addresses</dt><dd id="addresses">—</dd></div></dl></section>
+          <section class="panel form-panel update-panel"><div class="panel-heading"><h2>Software update</h2><span class="status-pill" id="update-state">Not checked</span></div><label>Admin password for installation<input id="update-password" type="password" autocomplete="current-password"></label><dl class="status-list"><div><dt>Installed</dt><dd id="update-installed">—</dd></div><div><dt>Latest release</dt><dd id="update-latest">—</dd></div></dl><p class="update-notes" id="update-notes" role="status" aria-live="polite">Check GitHub for a published STGTIME release, or upload an update package from this device.</p><button class="button secondary" id="check-update">Check for updates</button><button class="button primary" id="install-update" disabled>Download and install</button><div class="update-separator"><span>Offline update</span></div><label>STGTIME update package<input id="update-file" type="file" accept=".gz,.tgz,application/gzip"></label><button class="button secondary" id="upload-update">Upload and install</button><p class="hint">The device verifies the package, keeps your configuration, and automatically restores the previous version if the updated service fails to start.</p></section>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="login-dialog"><form method="dialog" id="login-form"><img src="/assets/logo.svg" alt="STGTIME"><h2>Device sign in</h2><p>Enter the admin password to control this STGTIME.</p><label>Password<input id="login-password" type="password" autocomplete="current-password" required autofocus></label><p class="form-error" id="login-error"></p><button class="button primary full" value="default">Sign in</button></form></dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script type="module" src="/app.js?v=20260904-11"></script>
+</body>
+</html>

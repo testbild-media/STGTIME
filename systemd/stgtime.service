@@ -1,0 +1,25 @@
+[Unit]
+Description=STGTIME stage timer
+After=network.target NetworkManager.service
+Wants=NetworkManager.service
+
+[Service]
+Type=simple
+User=stgtime
+Group=stgtime
+WorkingDirectory=/opt/stgtime/current
+Environment=NODE_ENV=production
+Environment=PORT=80
+Environment=STGTIME_CONFIG=/var/lib/stgtime/config.json
+Environment=STGTIME_DISPLAY_DRIVER=hub75
+ExecStart=/usr/bin/node /opt/stgtime/current/src/server.mjs
+Restart=on-failure
+RestartSec=2
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/stgtime
+
+[Install]
+WantedBy=multi-user.target

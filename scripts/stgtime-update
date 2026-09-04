@@ -1,0 +1,110 @@
+#!/bin/sh
+set -eu
+
+state_dir="/var/lib/stgtime/update"
+request_file="$state_dir/request.json"
+status_file="$state_dir/status.json"
+archive="$state_dir/update.tar.gz"
+base_dir="/opt/stgtime"
+original_target="$(readlink -f "$base_dir/current" 2>/dev/null || true)"
+
+write_status() {
+  /usr/bin/node -e '
+    const fs=require("fs");
+    const [file,state,message,version]=process.argv.slice(1);
+    const temp=file+".tmp";
+    fs.writeFileSync(temp,JSON.stringify({state,message,version:version||null,updatedAt:new Date().toISOString()})+"\n",{mode:0o640});
+    fs.renameSync(temp,file);
+  ' "$status_file" "$1" "$2" "${3:-}"
+  chown stgtime:stgtime "$status_file"
+}
+
+json_field() {
+  /usr/bin/node -e 'const v=require(process.argv[1]); const out=v[process.argv[2]]; if(out!==undefined&&out!==null) process.stdout.write(String(out))' "$request_file" "$1"
+}
+
+rollback() {
+  rollback_target="$original_target"
+  if [ -z "$rollback_target" ] || [ ! -d "$rollback_target" ]; then rollback_target="$(readlink -f "$base_dir/previous" 2>/dev/null || true)"; fi
+  if [ -n "$rollback_target" ] && [ -d "$rollback_target" ]; then
+    ln -sfn "$rollback_target" "$base_dir/current.rollback"
+    mv -Tf "$base_dir/current.rollback" "$base_dir/current"
+    systemctl restart stgtime.service stgtime-streamdeck.service || true
+    write_status rolled-back "Update failed; the previous version was restored" "$(cat "$rollback_target/VERSION" 2>/dev/null || true)"
+  else
+    write_status failed "Update failed and no previous version was available"
+  fi
+}
+
+[ "${1:-}" = apply ] || { echo "Unsupported update action" >&2; exit 2; }
+[ -f "$request_file" ] || { echo "No queued update" >&2; exit 2; }
+install -d -o stgtime -g stgtime -m 0750 "$state_dir"
+
+source="$(json_field source)"
+expected_sha256="$(json_field sha256)"
+requested_version="$(json_field version)"
+write_status preparing "Preparing update" "$requested_version"
+
+if [ "$source" = github ]; then
+  url="$(json_field url)"
+  case "$url" in
+    https://github.com/testbild-media/STGTIME/releases/download/*/stgtime-rpi4-arm64-*.tar.gz) ;;
+    *) write_status failed "Release download URL was rejected" "$requested_version"; exit 1;;
+  esac
+  write_status downloading "Downloading release" "$requested_version"
+  /usr/bin/curl --fail --location --silent --show-error --proto '=https' --tlsv1.2 --max-filesize 134217728 --output "$archive.tmp" "$url"
+  mv "$archive.tmp" "$archive"
+elif [ "$source" = upload ]; then
+  [ -f "$archive" ] || { write_status failed "Uploaded archive is missing"; exit 1; }
+else
+  write_status failed "Unknown update source"; exit 1
+fi
+
+actual_sha256="$(sha256sum "$archive" | awk '{print $1}')"
+if [ -z "$expected_sha256" ] || [ "$actual_sha256" != "$expected_sha256" ]; then
+  write_status failed "SHA-256 verification failed" "$requested_version"
+  exit 1
+fi
+
+work_dir="$(mktemp -d "$state_dir/work.XXXXXX")"
+trap 'rm -rf "$work_dir"' EXIT INT TERM
+if tar -tzf "$archive" | grep -Eq '(^/|(^|/)\.\.(/|$))'; then
+  write_status failed "Archive contains an unsafe path" "$requested_version"
+  exit 1
+fi
+if LC_ALL=C tar -tvzf "$archive" | grep -Eq '^[^d-]'; then
+  write_status failed "Archive contains an unsupported file type" "$requested_version"
+  exit 1
+fi
+tar --no-same-owner --no-same-permissions -xzf "$archive" -C "$work_dir"
+if [ "$(du -sk "$work_dir" | awk '{print $1}')" -gt 524288 ]; then
+  write_status failed "Extracted update is larger than 512 MiB" "$requested_version"
+  exit 1
+fi
+if find "$work_dir" -type l | grep -q .; then
+  write_status failed "Archive contains symbolic links" "$requested_version"
+  exit 1
+fi
+installer="$(find "$work_dir" -type f -path '*/scripts/install.sh' | head -n 1)"
+[ -n "$installer" ] || { write_status failed "Archive does not contain STGTIME" "$requested_version"; exit 1; }
+source_root="$(dirname "$(dirname "$installer")")"
+[ -f "$source_root/VERSION" ] || { write_status failed "Archive has no VERSION"; exit 1; }
+archive_version="$(tr -d '\r\n' < "$source_root/VERSION")"
+if [ -n "$requested_version" ] && [ "$archive_version" != "$requested_version" ]; then
+  write_status failed "Archive version does not match the release" "$requested_version"
+  exit 1
+fi
+
+write_status installing "Installing update" "$archive_version"
+if ! STGTIME_UPDATE=1 /bin/sh "$installer"; then rollback; exit 1; fi
+
+write_status verifying "Waiting for STGTIME to restart" "$archive_version"
+healthy=0
+for attempt in $(seq 1 30); do
+  if /usr/bin/curl --silent --fail --max-time 2 http://127.0.0.1/api/v1/health >/dev/null; then healthy=1; break; fi
+  sleep 1
+done
+if [ "$healthy" -ne 1 ]; then rollback; exit 1; fi
+
+rm -f "$request_file" "$archive"
+write_status complete "Update installed successfully" "$archive_version"

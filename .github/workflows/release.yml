@@ -1,0 +1,38 @@
+name: Release STGTIME update package
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify tag and build package
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="$(tr -d '\r\n' < VERSION)"
+          test "v${version}" = "${GITHUB_REF_NAME}"
+          test "$version" = "$(node -p "require('./package.json').version")"
+          archive="stgtime-rpi4-arm64-${version}.tar.gz"
+          output="$RUNNER_TEMP/$archive"
+          tar --exclude=.git --exclude=node_modules --exclude=streamdeck/node_modules --exclude=data --exclude=Archive_Old_for_Reference \
+            --transform "s,^,STGTIME-${version}/," -czf "$output" .
+          mv "$output" "$archive"
+          sha256sum "$archive" > "${archive}.sha256"
+          echo "ARCHIVE=$archive" >> "$GITHUB_ENV"
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          if [[ "$GITHUB_REF_NAME" == *-* ]]; then
+            gh release create "$GITHUB_REF_NAME" "$ARCHIVE" "$ARCHIVE.sha256" --verify-tag --generate-notes --prerelease --title "STGTIME $GITHUB_REF_NAME"
+          else
+            gh release create "$GITHUB_REF_NAME" "$ARCHIVE" "$ARCHIVE.sha256" --verify-tag --generate-notes --title "STGTIME $GITHUB_REF_NAME"
+          fi

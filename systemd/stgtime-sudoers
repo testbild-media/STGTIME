@@ -1,0 +1,4 @@
+stgtime ALL=(root) NOPASSWD: /usr/local/libexec/stgtime-network *
+stgtime ALL=(root) NOPASSWD: /usr/local/libexec/stgtime-matrix *
+stgtime ALL=(root) NOPASSWD: /usr/local/libexec/stgtime-system *
+stgtime ALL=(root) NOPASSWD: /usr/bin/systemctl start --no-block stgtime-update.service
